@@ -23,6 +23,24 @@ return {
     config = function() require("leap").create_default_mappings() end,
   },
 
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+  },
+
+  {
+    "sustech-data/wildfire.nvim",
+    event = "VeryLazy",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function() require("wildfire").setup() end,
+  },
+
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "VeryLazy",
+    opts = {},
+    config = function(_, opts) require("lsp_signature").setup(opts) end,
+  },
+
   -- == Overriding Plugins ==
 
   {
