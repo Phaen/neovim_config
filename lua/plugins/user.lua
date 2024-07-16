@@ -35,13 +35,61 @@ return {
   },
 
   {
+    "hrsh7th/nvim-cmp",
+    opts = function(_, opts)
+      table.insert(opts.sources, 1, { name = "codeium", priority = 1000 })
+      return opts
+    end,
+  },
+
+  {
+    "Exafunction/codeium.nvim",
+    event = "BufEnter",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+    },
+    config = function()
+      require("codeium").setup {
+        enable_chat = true,
+      }
+
+      vim.keymap.set("i", "<C-g>", function() return vim.fn["codeium#Accept"]() end, { expr = true, silent = true })
+      vim.keymap.set(
+        "i",
+        "<c-;>",
+        function() return vim.fn["codeium#CycleCompletions"](1) end,
+        { expr = true, silent = true }
+      )
+      vim.keymap.set(
+        "i",
+        "<c-,>",
+        function() return vim.fn["codeium#CycleCompletions"](-1) end,
+        { expr = true, silent = true }
+      )
+      vim.keymap.set("i", "<c-x>", function() return vim.fn["codeium#Clear"]() end, { expr = true, silent = true })
+    end,
+  },
+
+  {
     "ray-x/lsp_signature.nvim",
     event = "VeryLazy",
     opts = {},
-    config = function(_, opts) require("lsp_signature").setup(opts) end,
+    config = function(_, opts)
+      opts.hint_prefix = "➡️ "
+      require("lsp_signature").setup(opts)
+    end,
   },
 
   -- == Overriding Plugins ==
+
+  -- {
+  --   "nvim-neo-tree/neo-tree.nvim",
+  --   opts = function(_, opts)
+  --     opts.filesystem = { hijack_netrw_behavior = "disabled" }
+  --     return opts
+  --   end,
+  -- },
 
   {
     "goolord/alpha-nvim",
@@ -57,6 +105,7 @@ return {
         [[  ███████████ ███    ███ █████████ █████ █████ ████ █████  ]],
         [[ ██████  █████████████████████ ████ █████ █████ ████ ██████ ]],
       }
+      table.insert(opts.section.buttons.val, 3, opts.button("SPC f p", "  Find Project"))
       return opts
     end,
   },

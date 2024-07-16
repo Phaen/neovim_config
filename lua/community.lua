@@ -19,4 +19,5 @@ return {
   { import = "astrocommunity.pack.json" },
   { import = "astrocommunity.colorscheme.nightfox-nvim" },
   { import = "astrocommunity.recipes.neovide" },
+  { import = "astrocommunity.recipes.vscode" },
 }

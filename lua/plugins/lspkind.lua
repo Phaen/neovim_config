@@ -29,6 +29,7 @@ return {
       Event = " ",
       Operator = " ",
       TypeParameter = " ",
+      Codeium = "",
     }
     return opts
   end,
