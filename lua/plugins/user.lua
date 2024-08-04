@@ -81,15 +81,15 @@ return {
     end,
   },
 
-  -- == Overriding Plugins ==
+  {
+    "ricardoramirezr/blade-nav.nvim",
+    dependencies = {
+      "hrsh7th/nvim-cmp", -- if using nvim-cmp
+    },
+    ft = { "blade", "php" }, -- optional, improves startup time
+  },
 
-  -- {
-  --   "nvim-neo-tree/neo-tree.nvim",
-  --   opts = function(_, opts)
-  --     opts.filesystem = { hijack_netrw_behavior = "disabled" }
-  --     return opts
-  --   end,
-  -- },
+  -- == Overriding Plugins ==
 
   {
     "goolord/alpha-nvim",
