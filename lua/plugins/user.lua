@@ -53,21 +53,6 @@ return {
       require("codeium").setup {
         enable_chat = true,
       }
-
-      vim.keymap.set("i", "<C-g>", function() return vim.fn["codeium#Accept"]() end, { expr = true, silent = true })
-      vim.keymap.set(
-        "i",
-        "<c-;>",
-        function() return vim.fn["codeium#CycleCompletions"](1) end,
-        { expr = true, silent = true }
-      )
-      vim.keymap.set(
-        "i",
-        "<c-,>",
-        function() return vim.fn["codeium#CycleCompletions"](-1) end,
-        { expr = true, silent = true }
-      )
-      vim.keymap.set("i", "<c-x>", function() return vim.fn["codeium#Clear"]() end, { expr = true, silent = true })
     end,
   },
 
@@ -77,6 +62,7 @@ return {
     opts = {},
     config = function(_, opts)
       opts.hint_prefix = "➡️ "
+      opts.hint_enable = false
       require("lsp_signature").setup(opts)
     end,
   },
