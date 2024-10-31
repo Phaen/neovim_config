@@ -3,31 +3,6 @@ return {
 
   -- == Install Plugins ==
   {
-    "ahmedkhalf/project.nvim",
-    config = function()
-      require("project_nvim").setup {
-        require("telescope").load_extension "projects",
-      }
-    end,
-  },
-
-  {
-    "kylechui/nvim-surround",
-    version = "*",
-    event = "VeryLazy",
-    config = function() require("nvim-surround").setup {} end,
-  },
-
-  {
-    "ggandor/leap.nvim",
-    config = function() require("leap").create_default_mappings() end,
-  },
-
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-  },
-
-  {
     "sustech-data/wildfire.nvim",
     event = "VeryLazy",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
@@ -80,6 +55,44 @@ return {
     init = function() vim.g.suda_smart_edit = 1 end,
   },
 
+  {
+    "tpope/vim-fugitive",
+    cmd = "Git",
+  },
+
+  {
+    "kkoomen/vim-doge",
+  },
+
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("refactoring").setup()
+
+      vim.keymap.set("x", "<leader>re", ":Refactor extract ", { desc = "Refactor extract" })
+      vim.keymap.set("x", "<leader>rf", ":Refactor extract_to_file ", { desc = "Refactor extract to file" })
+
+      vim.keymap.set("x", "<leader>rv", ":Refactor extract_var ", { desc = "Refactor extract variable" })
+
+      vim.keymap.set({ "n", "x" }, "<leader>ri", ":Refactor inline_var", { desc = "Refactor inline variable" })
+
+      vim.keymap.set("n", "<leader>rI", ":Refactor inline_func", { desc = "Refactor inline function" })
+
+      vim.keymap.set("n", "<leader>rb", ":Refactor extract_block", { desc = "Refactor extract block" })
+      vim.keymap.set("n", "<leader>rbf", ":Refactor extract_block_to_file", { desc = "Refactor extract block to file" })
+
+      vim.keymap.set(
+        { "n", "x" },
+        "<leader>rr",
+        function() require("refactoring").select_refactor() end,
+        { desc = "Refactor select refactor" }
+      )
+    end,
+  },
   -- == Overriding Plugins ==
 
   {
