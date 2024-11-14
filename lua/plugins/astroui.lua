@@ -3,13 +3,31 @@
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
 
+local theme
+
+if vim.fn.has "mac" == 1 then
+  theme = vim.fn.system "defaults read -g AppleInterfaceStyle 2>/dev/null | grep -qi 'dark'" == 0 and "nightfox"
+    or "dawnfox"
+elseif vim.fn.has "unix" == 1 then
+  theme = vim.fn.system "gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | grep -qi 'dark'" == 0
+      and "nightfox"
+    or "dawnfox"
+elseif vim.fn.has "win32" == 1 then
+  theme = vim.fn.system 'reg query HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme 2>&1 | findstr /C:"0x0"'
+        == 0
+      and "nightfox"
+    or "dawnfox"
+else
+  theme = "nightfox"
+end
+
 ---@type LazySpec
 return {
   "AstroNvim/astroui",
   ---@type AstroUIOpts
   opts = {
     -- change colorscheme
-    colorscheme = "nightfox",
+    colorscheme = theme,
     -- AstroUI allows you to easily modify highlight groups easily for any and all colorschemes
     highlights = {
       init = { -- this table overrides highlights in all themes
