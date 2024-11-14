@@ -6,17 +6,15 @@
 local theme
 
 if vim.fn.has "mac" == 1 then
-  theme = vim.fn.system "defaults read -g AppleInterfaceStyle 2>/dev/null | grep -qi 'dark'" == 0 and "nightfox"
-    or "dawnfox"
+  theme = vim.fn.system("defaults read -g AppleInterfaceStyle 2>/dev/null"):find "Dark" and "nightfox" or "dawnfox"
 elseif vim.fn.has "unix" == 1 then
-  theme = vim.fn.system "gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | grep -qi 'dark'" == 0
+  theme = vim.fn.system("gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null"):find "dark"
       and "nightfox"
     or "dawnfox"
 elseif vim.fn.has "win32" == 1 then
-  theme = vim.fn.system 'reg query HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme 2>&1 | findstr /C:"0x0"'
-        == 0
-      and "nightfox"
-    or "dawnfox"
+  theme = vim.fn
+    .system("reg query HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme 2>&1")
+    :find "0x0" and "nightfox" or "dawnfox"
 else
   theme = "nightfox"
 end
