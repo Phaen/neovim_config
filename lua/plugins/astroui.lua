@@ -8,8 +8,7 @@ local theme
 if vim.fn.has "mac" == 1 then
   theme = vim.fn.system("defaults read -g AppleInterfaceStyle 2>/dev/null"):find "Dark" and "nightfox" or "dawnfox"
 elseif vim.fn.has "unix" == 1 then
-  theme = vim.fn.system("gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null"):find "dark"
-      and "nightfox"
+  theme = vim.fn.system("gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null"):find "dark" and "nightfox"
     or "dawnfox"
 elseif vim.fn.has "win32" == 1 then
   theme = vim.fn
@@ -18,6 +17,8 @@ elseif vim.fn.has "win32" == 1 then
 else
   theme = "nightfox"
 end
+
+theme = "nightfox"
 
 ---@type LazySpec
 return {
