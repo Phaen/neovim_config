@@ -1,22 +1,22 @@
-local dc_workdir = "/var/www/html/"
+local function get_docker_workdir()
+  local file = io.open("docker-compose.yml", "r")
+  if file then
+    local content = file:read "*all"
+    file:close()
 
--- Parse container path from the docker-compose volume
-local file = io.open("docker-compose.yml", "r")
-if file then
-  local content = file:read "*all"
-  file:close()
-
-  local in_volumes = false
-  for line in content:gmatch "[^\r\n]+" do
-    if line:match "^%s*volumes:" then
-      in_volumes = true
-    elseif in_volumes and line:match "^%s*%-%s*['\"]?%./?:" then
-      dc_workdir = line:match ":(.-)['\"]?$"
-      break
-    elseif in_volumes and not line:match "^%s*%-" then
-      in_volumes = false
+    local in_volumes = false
+    for line in content:gmatch "[^\r\n]+" do
+      if line:match "^%s*volumes:" then
+        in_volumes = true
+      elseif in_volumes and line:match "^%s*%-%s*['\"]?%./?:" then
+        return line:match ":(.-)['\"]?$"
+      elseif in_volumes and not line:match "^%s*%-" then
+        in_volumes = false
+      end
     end
   end
+
+  return "/var/www/html/" -- hail mary
 end
 
 ---@type LazySpec
@@ -29,34 +29,29 @@ return {
         type = "executable",
         command = "node",
         args = { os.getenv "HOME" .. "/vscode-php-debug/out/phpDebug.js" },
-        --[[ Install vscode-php-debug in your home directory
-          git clone https://github.com/xdebug/vscode-php-debug.git
-          cd vscode-php-debug
-          npm install && npm run build
-        ]]
       }
+
+      local base_config = {
+        type = "php",
+        request = "launch",
+        port = 9003,
+        xdebugSettings = {
+          max_children = 100,
+        },
+      }
+
       dap.configurations.php = {
-        {
-          type = "php",
-          request = "launch",
-          name = "Xdebug docker-compose",
-          port = 9003,
-          pathMappings = {
-            [dc_workdir] = "${workspaceFolder}",
-          },
-          xdebugSettings = {
-            max_children = 100,
-          },
-        },
-        {
-          type = "php",
-          request = "launch",
+        vim.tbl_extend("force", base_config, {
+          name = "Xdebug docker",
+          pathMappings = function()
+            return {
+              [get_docker_workdir()] = "${workspaceFolder}",
+            }
+          end,
+        }),
+        vim.tbl_extend("force", base_config, {
           name = "Xdebug local",
-          port = 9003,
-          xdebugSettings = {
-            max_children = 100,
-          },
-        },
+        }),
       }
     end,
   },
