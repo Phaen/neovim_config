@@ -24,12 +24,16 @@ return {
   {
     "mfussenegger/nvim-dap",
     config = function()
-      local dap = require "dap"
-      dap.adapters.php = {
-        type = "executable",
-        command = "node",
-        args = { os.getenv "HOME" .. "/vscode-php-debug/out/phpDebug.js" },
+      -- Make sure php-debug-adapter is installed
+      require("mason-nvim-dap").setup {
+        automatic_installation = true,
+        handlers = {},
+        ensure_installed = {
+          "php-debug-adapter",
+        },
       }
+
+      local dap = require "dap"
 
       local base_config = {
         type = "php",
