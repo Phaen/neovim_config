@@ -11,7 +11,7 @@ if file then
     if line:match "^%s*volumes:" then
       in_volumes = true
     elseif in_volumes and line:match "^%s*%-%s*['\"]?%./?:" then
-      dc_workdir = line:match ":(.+)['\"]?$"
+      dc_workdir = line:match ":(.-)['\"]?$"
       break
     elseif in_volumes and not line:match "^%s*%-" then
       in_volumes = false
