@@ -16,7 +16,7 @@ local function get_docker_workdir()
     end
   end
 
-  return "/var/www/html/" -- hail mary
+  return "/var/www/html" -- hail mary
 end
 
 ---@type LazySpec
