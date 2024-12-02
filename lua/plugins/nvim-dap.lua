@@ -24,10 +24,8 @@ return {
   {
     "mfussenegger/nvim-dap",
     config = function()
-      -- Make sure php-debug-adapter is installed
       require("mason-nvim-dap").setup {
         automatic_installation = true,
-        handlers = {},
         ensure_installed = {
           "php-debug-adapter",
         },
@@ -35,28 +33,32 @@ return {
 
       local dap = require "dap"
 
-      local base_config = {
-        type = "php",
-        request = "launch",
-        port = 9003,
-        xdebugSettings = {
-          max_children = 100,
-        },
-      }
+      -- Let mason-nvim-dap set up the adapter first
+      -- Overwrite the configuration after to get rid of bad defaults
+      vim.defer_fn(function()
+        local base_config = {
+          type = "php",
+          request = "launch",
+          port = 9003,
+          xdebugSettings = {
+            max_children = 100,
+          },
+        }
 
-      dap.configurations.php = {
-        vim.tbl_extend("force", base_config, {
-          name = "Xdebug docker",
-          pathMappings = function()
-            return {
-              [get_docker_workdir()] = "${workspaceFolder}",
-            }
-          end,
-        }),
-        vim.tbl_extend("force", base_config, {
-          name = "Xdebug local",
-        }),
-      }
+        dap.configurations.php = {
+          vim.tbl_extend("force", base_config, {
+            name = "Xdebug docker",
+            pathMappings = function()
+              return {
+                [get_docker_workdir()] = "${workspaceFolder}",
+              }
+            end,
+          }),
+          vim.tbl_extend("force", base_config, {
+            name = "Xdebug local",
+          }),
+        }
+      end, 100)
     end,
   },
 }
