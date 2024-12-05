@@ -5,6 +5,7 @@
 
 local theme
 
+-- Switch between themes depending on dark mode
 if vim.fn.has "mac" == 1 then
   theme = vim.fn.system("defaults read -g AppleInterfaceStyle 2>/dev/null"):find "Dark" and "nightfox" or "dawnfox"
 elseif vim.fn.has "unix" == 1 then
@@ -18,6 +19,7 @@ else
   theme = "nightfox"
 end
 
+-- An editor in lightmode, what was I thinking?
 theme = "nightfox"
 
 ---@type LazySpec

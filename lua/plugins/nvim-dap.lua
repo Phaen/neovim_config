@@ -47,7 +47,7 @@ return {
 
         dap.configurations.php = {
           vim.tbl_extend("force", base_config, {
-            name = "Xdebug docker",
+            name = "PHP: Xdebug docker",
             pathMappings = function()
               return {
                 [get_docker_workdir()] = "${workspaceFolder}",
@@ -55,7 +55,7 @@ return {
             end,
           }),
           vim.tbl_extend("force", base_config, {
-            name = "Xdebug local",
+            name = "PHP: Xdebug local",
           }),
         }
       end, 100)
