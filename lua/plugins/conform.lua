@@ -3,17 +3,21 @@ return {
   {
     "stevearc/conform.nvim",
     opts = {
+      format_on_save = {
+        timeout_ms = 2000,
+        lsp_format = "fallback",
+      },
       formatters_by_ft = {
-        php = function()
-          local has_pint = vim.fn.glob "vendor/bin/pint" ~= ""
-          return has_pint and { "pint" } or { "phpcsfixer" }
-        end,
+        php = { "pint", "php-cs-fixer", stop_after_first = true },
       },
       formatters = {
         pint = {
           command = "vendor/bin/pint",
-          args = { "--test", "-" },
-          stdin = true,
+        },
+        ["php-cs-fixer"] = {
+          command = "vendor/bin/php-cs-fixer",
+          args = { "fix", "--sequential", "$FILENAME" },
+          stdin = false,
         },
       },
     },
