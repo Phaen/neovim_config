@@ -5,6 +5,9 @@
 -- Use Intelephense instead of PhpActor
 vim.g.lazyvim_php_lsp = "intelephense"
 
+-- Enable dynamic window titles (otherwise just Nvim/Neovide)
+vim.opt.title = true
+
 -- Increase PHPStan memory limit, otherwise it will crash on large projects
 vim.env.PHPSTAN_MEMORY_LIMIT = "1G"
 
