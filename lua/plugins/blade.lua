@@ -1,20 +1,3 @@
--- Configure Blade treesitter parser
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-parser_config.blade = {
-  install_info = {
-    url = "https://github.com/EmranMR/tree-sitter-blade",
-    files = { "src/parser.c" },
-    branch = "main",
-  },
-}
-
--- Add Blade filetype
-vim.filetype.add({
-  pattern = {
-    [".*%.blade%.php"] = "blade",
-  },
-})
-
 ---@type LazySpec
 return {
   -- Formatter config for blade
@@ -41,8 +24,26 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
-      ensure_installed = { "blade" },
+      ensure_installed = { "html", "php_only", "php", "bash", "blade" },
     },
+    config = function(_, opts)
+      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+      parser_config.blade = {
+        install_info = {
+          url = "https://github.com/EmranMR/tree-sitter-blade",
+          files = { "src/parser.c" },
+          branch = "main",
+        },
+      }
+
+      vim.filetype.add({
+        pattern = {
+          [".*%.blade%.php"] = "blade",
+        },
+      })
+
+      require("nvim-treesitter.configs").setup(opts)
+    end,
   },
   -- Completions for Blade
   -- WARN: Currently useless in this config, because of no blink support
