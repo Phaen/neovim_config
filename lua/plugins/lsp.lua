@@ -1,4 +1,4 @@
----@type LazySpec
+---@type LazyPluginSpec
 return {
   "neovim/nvim-lspconfig",
   opts = function(_, opts)

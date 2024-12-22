@@ -20,7 +20,7 @@ local function get_docker_dir()
   return "/var/www/html" -- hail mary
 end
 
----@type LazySpec
+---@type LazyPluginSpec
 return {
   {
     "nvim-treesitter/nvim-treesitter",

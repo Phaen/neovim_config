@@ -1,4 +1,4 @@
----@type LazySpec
+---@type LazyPluginSpec
 return {
   "lambdalisue/vim-suda",
   init = function()

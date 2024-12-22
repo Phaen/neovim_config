@@ -1,4 +1,4 @@
----@type LazySpec
+---@type LazyPluginSpec
 return {
   { "EdenEast/nightfox.nvim" },
 
