@@ -79,17 +79,7 @@ return {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
-        php = { "pint_vendor", "phpcsfixer_vendor", "php_cs_fixer", stop_after_first = true },
-      },
-      formatters = {
-        pint_vendor = {
-          command = "vendor/bin/pint",
-        },
-        phpcsfixer_vendor = {
-          command = "vendor/bin/php-cs-fixer",
-          args = { "fix", "--sequential", "$FILENAME" },
-          stdin = false,
-        },
+        php = { "pint", "phpcbf", "php_cs_fixer", stop_after_first = true },
       },
     },
   },
