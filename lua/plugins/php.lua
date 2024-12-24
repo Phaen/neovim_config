@@ -30,10 +30,11 @@ return {
     "williamboman/mason.nvim",
     opts = {
       ensure_installed = {
+        -- no pint, phpcs, phpcbf: so we only use it if its installed in the project
+        "php-cs-fixer", -- our backup formatter, if nothing is installed
         "phpstan",
         "intelephense",
         "php-debug-adapter",
-        "php-cs-fixer",
       },
     },
   },
@@ -87,7 +88,7 @@ return {
     "mfussenegger/nvim-lint",
     opts = {
       linters_by_ft = {
-        php = { "phpstan" },
+        php = { "phpstan", "phpcs" },
       },
     },
   },
