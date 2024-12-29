@@ -1,31 +1,37 @@
--- Get directory in docker compose file that project files are mapped to
-local function get_docker_dir()
-  local file = io.open("docker-compose.yml", "r")
-  if file then
-    local content = file:read("*all")
-    file:close()
+-- Get target directory from docker compose container that cwd is bound to
+local function get_docker_target()
+  local handle = io.popen("docker compose ps --format '{{.Labels}}'")
+  if handle then
+    local result = handle:read("*a")
+    handle:close()
 
-    local in_volumes = false
-    for line in content:gmatch("[^\r\n]+") do
-      if line:match("^%s*volumes:") then
-        in_volumes = true
-      elseif in_volumes and line:match("^%s*%-%s*['\"]?%./?:") then
-        return line:match(":(.-)['\"]?$")
-      elseif in_volumes and not line:match("^%s*%-") then
-        in_volumes = false
+    local cwd = vim.fn.getcwd()
+
+    for labels in result:gmatch("[^\r\n]+") do
+      for label, value in string.gmatch(labels, "([^,]+)=([^,]+)") do
+        if string.match(label, "Source$") and value == cwd then
+          local target_label = string.gsub(label, "Source$", "Target")
+          for l, v in string.gmatch(labels, "([^,]+)=([^,]+)") do
+            if l == target_label then
+              return v
+            end
+          end
+        end
       end
     end
   end
-
   return "/var/www/html" -- hail mary
 end
 
 ---@type LazyPluginSpec
 return {
+  -- Add treesitter syntax
   {
     "nvim-treesitter/nvim-treesitter",
     opts = { ensure_installed = { "php" } },
   },
+
+  -- Add Mason packages
   {
     "williamboman/mason.nvim",
     opts = {
@@ -38,6 +44,7 @@ return {
       },
     },
   },
+  -- Configure debugger with xdebug
   {
     "mfussenegger/nvim-dap",
     opts = function()
@@ -66,7 +73,7 @@ return {
           name = "PHP: Xdebug docker",
           pathMappings = function()
             return {
-              [get_docker_dir()] = "${workspaceFolder}",
+              [get_docker_target()] = "${workspaceFolder}",
             }
           end,
         }),
@@ -76,6 +83,7 @@ return {
       }
     end,
   },
+  -- Configure formatters, depending on which are installed in the project
   {
     "stevearc/conform.nvim",
     opts = {
@@ -84,6 +92,7 @@ return {
       },
     },
   },
+  -- Configure linters, currently tries to run all, regardless of which are installed in the project
   {
     "mfussenegger/nvim-lint",
     opts = {
@@ -91,5 +100,19 @@ return {
         php = { "phpstan", "phpcs" },
       },
     },
+  },
+  -- Configure tests with pest
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "V13Axel/neotest-pest",
+    },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require("neotest-pest"),
+        },
+      })
+    end,
   },
 }
