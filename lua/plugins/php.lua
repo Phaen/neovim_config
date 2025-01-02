@@ -44,6 +44,23 @@ return {
       },
     },
   },
+  -- Default of 1 MB is way too low for autoload and class files
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        intelephense = {
+          settings = {
+            intelephense = {
+              files = {
+                maxSize = 100000000,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
   -- Configure debugger with xdebug
   {
     "mfussenegger/nvim-dap",
@@ -83,7 +100,7 @@ return {
       }
     end,
   },
-  -- Configure formatters, depending on which are installed in the project
+  -- Configure formatters, only runs the first that is installed in the project
   {
     "stevearc/conform.nvim",
     opts = {
@@ -92,14 +109,19 @@ return {
       },
     },
   },
-  -- Configure linters, currently tries to run all, regardless of which are installed in the project
+  -- Configure linters, conditionally add them depending on which are installed in the project
   {
     "mfussenegger/nvim-lint",
-    opts = {
-      linters_by_ft = {
-        php = { "phpstan", "phpcs" },
-      },
-    },
+    opts = function(_, opts)
+      opts.linters_by_ft = opts.linters_by_ft or {}
+      opts.linters_by_ft.php = { "phpstan" }
+
+      if vim.fn.glob(vim.fn.getcwd() .. "/vendor/bin/phpcs") ~= "" then
+        table.insert(opts.linters_by_ft.php, "phpcs")
+      end
+
+      return opts
+    end,
   },
   -- Configure tests with pest
   {
