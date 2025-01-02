@@ -113,11 +113,14 @@ return {
   {
     "mfussenegger/nvim-lint",
     opts = function(_, opts)
-      opts.linters_by_ft = opts.linters_by_ft or {}
-      opts.linters_by_ft.php = { "phpstan" }
+      local linters = { "phpstan", "phpcs" }
 
-      if vim.fn.glob(vim.fn.getcwd() .. "/vendor/bin/phpcs") ~= "" then
-        table.insert(opts.linters_by_ft.php, "phpcs")
+      opts.linters_by_ft = opts.linters_by_ft or {}
+      opts.linters_by_ft.php = {}
+      for _, linter in ipairs(linters) do
+        if vim.fn.executable(require("lint").linters[linter].cmd()) == 1 then
+          table.insert(opts.linters_by_ft.php, linter)
+        end
       end
 
       return opts
