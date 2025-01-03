@@ -44,7 +44,6 @@ return {
       },
     },
   },
-  -- Default of 1 MB is way too low for autoload and class files
   {
     "neovim/nvim-lspconfig",
     opts = {
@@ -52,7 +51,15 @@ return {
         intelephense = {
           settings = {
             intelephense = {
+              environment = {
+                includePaths = {
+                  -- Allow stubs to be autodiscovered
+                  "~/.composer/vendor/php-stubs",
+                  "vendor/php-stubs",
+                },
+              },
               files = {
+                -- Default of 1 MB is way too low for autoload and class files
                 maxSize = 100000000,
               },
             },

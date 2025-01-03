@@ -14,18 +14,5 @@ return {
         end,
       },
     })
-
-    -- Add stubs for intelephense
-    opts.servers.intelephense = {
-      environment = {
-        includePaths = {
-          "~/.composer/vendor/php-stubs",
-          "vendor/php-stubs",
-        },
-      },
-      files = {
-        maxSize = 10000000,
-      },
-    }
   end,
 }
