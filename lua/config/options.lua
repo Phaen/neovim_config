@@ -14,16 +14,4 @@ vim.env.PHPSTAN_MEMORY_LIMIT = "1G"
 -- Base the working directory on the root of the project
 vim.g.root_spec = { "cwd" }
 
--- ####################
--- ## Neovide options #
--- ####################
-
--- Use left option key on Macs as alt key
--- NOTE: Make sure to disable conflicting Mac shortcuts in System Preferences > Keyboard > Shortcuts
-vim.g.neovide_input_macos_option_key_is_meta = "only_left"
-
--- Change font size
-vim.g.neovide_scale_factor = 0.8
-
--- Better font display
-vim.g.neovide_font_edging = "subpixelantialias"
+require("config.neovide")
