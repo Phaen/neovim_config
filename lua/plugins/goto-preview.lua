@@ -1,5 +1,10 @@
 return {
   "rmagatti/goto-preview",
   event = "BufEnter",
-  config = true,
+  opts = {
+    default_mappings = true,
+  },
+  keys = {
+    { "gp", "", desc = "Preview", mode = "n" },
+  },
 }

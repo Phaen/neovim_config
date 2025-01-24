@@ -3,5 +3,6 @@
 -- Add any additional keymaps here
 --
 local map = vim.keymap.set
+local unmap = vim.keymap.del
 
 map("n", "<C-q>", "<cmd>q<cr>", { desc = "Quit", remap = true })
